@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Arabic Mastery Quest: Classical Philology Sandbox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #06070a;
+            --bg-gradient: radial-gradient(circle at 80% 20%, #111424 0%, #06070a 100%);
+            --panel-bg: rgba(13, 16, 26, 0.65);
+            --panel-border: rgba(255, 255, 255, 0.05);
+            --gold-primary: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.15);
+            --text-pure: #ffffff;
+            --text-body: #94a3b8;
+            --text-dark: #475569;
+            --sarf-accent: #06b6d4;
+            --sarf-glass: rgba(6, 182, 212, 0.06);
+            --nahw-accent: #a855f7;
+            --nahw-glass: rgba(168, 85, 247, 0.06);
+            --tarkeeb-accent: #3b82f6;
+            --tarkeeb-glass: rgba(59, 130, 246, 0.06);
+            --emerald-true: #10b981;
+            --emerald-glass: rgba(16, 185, 129, 0.08);
+            --rose-true: #ef4444;
+            --rose-glass: rgba(239, 68, 68, 0.08);
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-base);
+            background: var(--bg-gradient);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 24px;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        /* Complex Animated Abstract Background Grid */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .ambient-glow-1 {
+            position: absolute; width: 700px; height: 700px; background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+            top: -20%; right: -10%; z-index: 0; pointer-events: none; mix-blend-mode: plus-lighter;
+        }
+
+        .ambient-glow-2 {
+            position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
+            bottom: -10%; left: -10%; z-index: 0; pointer-events: none; mix-blend-mode: plus-lighter;
+        }
+
+        .game-wrapper { width: 100%; max-width: 900px; position: relative; z-index: 1; }
+        
+        /* Glassmorphic Cyber-Dashboard Card Component */
+        .dashboard-card {
+            background: var(--panel-bg); 
+            backdrop-filter: blur(40px) saturate(180%); 
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid var(--panel-border); 
+            border-radius: 40px; 
+            padding: 60px;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.07);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-widget { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+            margin-bottom: 40px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 24px;
+        }
+        .rank-container { display: flex; flex-direction: column; gap: 8px; }
+        .rank-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; color: var(--text-dark); }
+        .rank-title { font-size: 1.5rem; font-weight: 800; color: var(--text-pure); display: flex; align-items: center; gap: 12px; }
+        .rank-title span { color: var(--gold-primary); text-shadow: 0 0 20px var(--gold-glow); }
+        
+        .metric-group { display: flex; gap: 16px; }
+        .metric-badge {
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px 24px; 
+            border-radius: 20px; 
+            font-weight: 700; 
+            font-size: 0.95rem; 
+            color: var(--text-pure);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+        }
+        .metric-badge em { font-style: normal; color: var(--text-dark); font-weight: 500; }
+        .metric-badge span { color: var(--gold-primary); font-weight: 800; }
+
+        .tracker-timeline { background: rgba(255, 255, 255, 0.02); height: 4px; border-radius: 2px; margin-bottom: 48px; overflow: hidden; position: relative; }
+        .tracker-fill { height: 100%; background: linear-gradient(90deg, #d97706, var(--gold-primary)); width: 0%; transition: var(--transition-smooth); }
+
+        /* Verse Viewport Component with Structural Accent Grid */
+        .verse-viewport {
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 28px; 
+            padding: 50px; 
+            text-align: center; 
+            margin-bottom: 40px; 
+            position: relative;
+            box-shadow: inset 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+        .verse-viewport::before { 
+            content: ''; position: absolute; top: 12px; left: 12px; bottom: 12px; right: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.01); border-radius: 20px; pointer-events: none;
+        }
+        .arabic-display { 
+            font-family: 'Amiri', serif; 
+            font-size: 3.2rem; 
+            font-weight: 700; 
+            line-height: 1.8; 
+            direction: rtl; 
+            margin-bottom: 24px; 
+            color: var(--text-pure);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .translation-display { font-size: 1.1rem; color: #64748b; font-style: italic; font-weight: 400; max-width: 85%; margin: 0 auto; }
+
+        .interactive-zone { display: flex; flex-direction: column; }
+        
+        .category-tag { 
+            align-self: flex-start; 
+            display: inline-block; 
+            padding: 8px 18px; 
+            border-radius: 14px; 
+            font-size: 0.75rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            margin-bottom: 24px; 
+        }
+        .category-tag.sarf { color: var(--sarf-accent); background: var(--sarf-glass); border: 1px solid rgba(6, 182, 212, 0.15); }
+        .category-tag.nahw { color: var(--nahw-accent); background: var(--nahw-glass); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .category-tag.tarkeeb { color: var(--tarkeeb-accent); background: var(--tarkeeb-glass); border: 1px solid rgba(59, 130, 246, 0.15); }
+
+        .question-statement { font-size: 1.4rem; font-weight: 700; line-height: 1.5; color: var(--text-pure); margin-bottom: 32px; letter-spacing: -0.02em; }
+        .options-grid { display: flex; flex-direction: column; gap: 16px; }
+        
+        /* Advanced Interactive Option Items */
+        .option-node {
+            background: rgba(255, 255, 255, 0.01); 
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 24px 32px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-family: inherit; 
+            font-size: 1.05rem;
+            color: #cbd5e1; 
+            font-weight: 500; 
+            text-align: left; 
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .option-node::after {
+            content: ''; width: 6px; height: 6px; border-radius: 50%; background: transparent; transition: var(--transition-smooth);
+        }
+        .option-node:hover:not(:disabled) { 
+            background: rgba(255, 255, 255, 0.03); 
+            border-color: rgba(255, 255, 255, 0.15); 
+            color: var(--text-pure); 
+            transform: translateY(-2px); 
+        }
+        .option-node:hover:not(:disabled)::after { background: var(--gold-primary); box-shadow: 0 0 10px var(--gold-primary); }
+        .option-node.node-correct { background: var(--emerald-glass); border-color: rgba(16, 185, 129, 0.3); color: #a7f3d0; font-weight: 700; }
+        .option-node.node-correct::after { background: var(--emerald-true); width: 8px; height: 8px; }
+        .option-node.node-wrong { background: var(--rose-glass); border-color: rgba(239, 68, 68, 0.3); color: #fecdd3; }
+        .option-node.node-wrong::after { background: var(--rose-true); width: 8px; height: 8px; }
+
+        /* Architectural Click-To-Synthesize Tarkeeb Module */
+        .tarkeeb-board { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 32px; 
+            background: rgba(0, 0, 0, 0.2); 
+            padding: 40px; 
+            border-radius: 28px; 
+            border: 1px solid rgba(255,255,255,0.03); 
+        }
+        .tarkeeb-slots { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; direction: rtl; }
+        
+        .tarkeeb-slot-card { 
+            background: rgba(255,255,255,0.01); 
+            border: 1px solid rgba(255,255,255,0.04); 
+            border-radius: 24px; 
+            padding: 24px; 
+            min-width: 190px; 
+            text-align: center; 
+            transition: var(--transition-smooth); 
+            cursor: pointer;
+        }
+        .tarkeeb-slot-card:hover { border-color: rgba(255, 255, 255, 0.1); background: rgba(255,255,255,0.02); }
+        .tarkeeb-slot-card.selected-slot { border-color: var(--gold-primary); background: rgba(245, 158, 11, 0.02); box-shadow: 0 0 30px rgba(245, 158, 11, 0.05); }
+        
+        .word-label { font-family: 'Amiri', serif; font-size: 2.2rem; color: #fff; margin-bottom: 16px; display: block; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px; font-weight: 700; }
+        
+        .interactive-display-zone { 
+            background: rgba(0,0,0,0.3); 
+            border: 1px dashed rgba(255,255,255,0.08); 
+            border-radius: 14px; 
+            min-height: 56px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--text-dark); 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            padding: 8px 12px; 
+            transition: var(--transition-smooth); 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .interactive-display-zone.filled { color: var(--gold-primary); border-style: solid; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.02); font-size: 0.95rem; }
+
+        .tarkeeb-pool { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 12px; 
+            justify-content: center; 
+            margin-top: 12px; 
+            border-top: 1px solid rgba(255,255,255,0.04); 
+            padding-top: 32px; 
+        }
+        .clickable-role-node { 
+            background: rgba(255,255,255,0.02); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 14px; 
+            padding: 14px 24px; 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            color: #cbd5e1; 
+            cursor: pointer; 
+            transition: var(--transition-smooth); 
+        }
+        .clickable-role-node:hover { background: rgba(255,255,255,0.06); border-color: rgba(255, 255, 255, 0.2); color: var(--text-pure); transform: translateY(-1px); }
+        .clickable-role-node.active-selection { background: var(--text-pure); color: var(--bg-base); border-color: var(--text-pure); font-weight: 800; box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+
+        /* Unified Real-time Evaluation Critique Panel */
+        .critique-panel { margin-top: 36px; padding: 30px; border-radius: 24px; font-size: 1.05rem; line-height: 1.7; display: none; border: 1px solid transparent; animation: panelFade 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .critique-panel strong { font-weight: 800; font-size: 1.15rem; display: block; margin-bottom: 8px; letter-spacing: -0.01em; }
+        .critique-panel.node-correct { background: var(--emerald-glass); color: #a7f3d0; border-color: rgba(16, 185, 129, 0.15); }
+        .critique-panel.node-wrong { background: var(--rose-glass); color: #fecdd3; border-color: rgba(239, 68, 68, 0.15); }
+
+        .submission-trigger {
+            width: 100%; background: var(--text-pure); color: var(--bg-base); border: none; padding: 22px;
+            border-radius: 20px; font-size: 1.05rem; font-weight: 800; cursor: pointer; margin-top: 40px;
+            display: none; transition: var(--transition-smooth); letter-spacing: 0.5px;
+        }
+        .submission-trigger:hover { background: var(--gold-primary); color: var(--bg-base); transform: translateY(-2px); box-shadow: 0 20px 40px -10px var(--gold-glow); }
+        
+        @keyframes panelFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width: 768px) {
+            .dashboard-card { padding: 32px 24px; border-radius: 28px; }
+            .arabic-display { font-size: 2.4rem; }
+            .header-widget { flex-direction: column; align-items: flex-start; gap: 24px; }
+            .metric-group { width: 100%; }
+            .metric-badge { flex: 1; justify-content: center; padding: 12px; font-size: 0.85rem; }
+            .tarkeeb-board { padding: 20px; }
+            .tarkeeb-slot-card { width: 100%; min-width: unset; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-glow-1"></div>
+<div class="ambient-glow-2"></div>
+
+<div class="game-wrapper">
+    <div class="dashboard-card">
+        <div class="header-widget">
+            <div class="rank-container">
+                <span class="rank-label">Pedagogical Standing</span>
+                <span class="rank-title" id="display-rank">Mubtadi' <span>(Lvl 1)</span></span>
+            </div>
+            <div class="metric-group">
+                <div class="metric-badge"><em>Score</em> <span id="display-score">0</span></div>
+                <div class="metric-badge"><em>Streak</em> <span id="display-streak-count">0/6</span></div>
+            </div>
+        </div>
+
+        <div class="tracker-timeline"><div class="tracker-fill" id="display-streak"></div></div>
+
+        <div class="verse-viewport">
+            <div class="arabic-display" id="viewport-arabic">...</div>
+            <div class="translation-display" id="viewport-translation">...</div>
+        </div>
+
+        <div class="interactive-zone">
+            <span class="category-tag" id="display-type">Nahw</span>
+            <div class="question-statement" id="display-question">...</div>
+            
+            <div class="options-grid" id="viewport-options"></div>
+
+            <div class="tarkeeb-board" id="viewport-tarkeeb" style="display: none;">
+                <div class="tarkeeb-slots" id="tarkeeb-slots-container"></div>
+                <div class="tarkeeb-pool" id="tarkeeb-labels-pool"></div>
+            </div>
+
+            <div class="critique-panel" id="viewport-critique"></div>
+        </div>
+
+        <button class="submission-trigger" id="action-trigger" onclick="advanceQuestRoute()">Advance Quest Tier →</button>
+    </div>
+</div>
+
+<script>
+    /*
+     ==========================================================================================
+     INFINITE PROCEDURAL DATA CORE - ACCORDING TO HIDYATUN NAHW & NAHW MIR CLASSICAL PARADIGMS
+     ==========================================================================================
+    */
+    const linguisticsRepository = [
+        {
+            verse: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+            translation: '"Say, \'He is Allah, [who is] One.\'"',
+            type: "nahw",
+            question: "According to Hidayatun Nahw, what type of sentence construct is initiated inside the scope of the speech block (Meqool al-Qawl)?",
+            options: [
+                { text: "Jumlah Ismiyyah Khabariyyah, built from a starting core base pronoun (Dhamir al-Sha'n) acting as Mubtada'.", correct: true },
+                { text: "Jumlah Fi'liyyah Inshaiyyah, driven wholly by implicit modification factors.", correct: false },
+                { text: "Jumlah Shartiyyah, holding an omitted operational clause configuration.", correct: false }
+            ],
+            explanation: "As detailed in Hidayatun Nahw, 'هُوَ' functions as Dhamir al-Sha'n (the pronoun of matter/fact), occupying the position of Mubtada'. The following phrase forms its systemic Khabar, culminating as a Jumlah Ismiyyah Khabariyyah."
+        },
+        {
+            verse: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+            translation: '"[All] praise is [due] to Allah, Lord of the worlds"',
+            type: "nahw",
+            question: "In Nahw Mir, how is the case inflection (I'rab) of the word 'الْحَمْدُ' classified?",
+            options: [
+                { text: "I'rab Lafzi (explicit voweled inflection) with a visible Dammah on a Ghayr-Munsarif structural base.", correct: false },
+                { text: "I'rab Lafzi (explicit inflection) with a Dammah, classified under Ism Mu'rab Mufrad Munsarif Saheeh.", correct: true },
+                { text: "I'rab Taqdiri (assumed/hidden inflection) due to phonetic weight processing requirements.", correct: false }
+            ],
+            explanation: "Nahw Mir dictates that a fully sound, singular, fully declinable noun (Mufrad Munsarif Saheeh) takes explicit textual vowels (I'rab Lafzi), showing a clear Dammah in its Raf' state."
+        },
+        {
+            verse: "جَاءَ نَصْرُ اللَّهِ",
+            translation: '"The victory of Allah has come"',
+            type: "tarkeeb",
+            question: "Construct the correct grammatical structural syntax tree (Tarkeeb) based upon standard parsing parameters:",
+            words: [
+                { word: "جَاءَ", correctRole: "Fi'l (Verb)" },
+                { word: "نَصْرُ", correctRole: "Mudaf (Possessed)" },
+                { word: "اللَّهِ", correctRole: "Mudaf Ilayh (Possessor)" }
+            ],
+            rolesPool: ["Fi'l (Verb)", "Mudaf (Possessed)", "Mudaf Ilayh (Possessor)", "Mubtada'", "Khabar"],
+            explanation: "The composition is a Jumlah Fi'liyyah. 'جَاءَ' is the Fi'l. 'نَصْرُ' is Mudaf and 'اللَّهِ' is Mudaf Ilayh. Together, the Mudaf and Mudaf Ilayh form the Fa'il (Agent) for the preceding verb."
+        },
+        {
+            verse: "بِسْمِ اللَّهِ",
+            translation: '"In the name of Allah"',
+            type: "tarkeeb",
+            question: "Assemble the structural components to complete the Tarkeeb breakdown:",
+            words: [
+                { word: "بِ", correctRole: "Harf Jarr" },
+                { word: "سْمِ", correctRole: "Mudaf" },
+                { word: "اللَّهِ", correctRole: "Mudaf Ilayh" }
+            ],
+            rolesPool: ["Harf Jarr", "Mudaf", "Mudaf Ilayh", "Fa'il", "Sifah", "Khabar"],
+            explanation: "'بِ' is the Harf Jarr. 'سْمِ' functions as Mudaf, compounding with the majestic name 'اللَّهِ' which acts as Mudaf Ilayh. The combined compound is bound down by the preceding genitive operator particle."
+        },
+        {
+            verse: "إِنَّ اللَّهَ غَفُورٌ",
+            translation: '"Indeed, Allah is Forgiving."',
+            type: "nahw",
+            question: "In the light of Hidayatun Nahw, how do the Huruf Mushabbahah bil-Fi'l alter the sentence base?",
+            options: [
+                { text: "They give Raf' to the Mubtada' and Nasb to the Khabar.", correct: false },
+                { text: "They give Nasb to the Mubtada' (now named Ism Inna) and Raf' to the Khabar.", correct: true },
+                { text: "They enforce Jarr on both parts due to structural dominance.", correct: false }
+            ],
+            explanation: "Hidayatun Nahw explains that 'إِنَّ' and its sisters enter a nominal sentence, causing the subject to enter the accusative state (Nasb) and the predicate to maintain or enter the nominative state (Raf')."
+        },
+        {
+            verse: "وَالْعَصْرِ",
+            translation: '"By time,"',
+            type: "nahw",
+            question: "What is the structural classification of the particle 'وَ' here as derived from Nahw Mir text segments?",
+            options: [
+                { text: "Waw al-Atf, serving as a coordinating conjunction between elements.", correct: false },
+                { text: "Waw al-Qasam, functioning as an Amil (governing agent) of Jarr.", correct: true },
+                { text: "Waw al-Hal, introducing a situational clause structure.", correct: false }
+            ],
+            explanation: "Nahw Mir classifies Waw al-Qasam (Waw of Oath) among the Huruf al-Jarr. It acts upon the explicit noun directly following it, forcing it into the genitive state (Majroor)."
+        },
+        {
+            verse: "خَلَقَ الْإِنسَانَ",
+            translation: '"He created man"',
+            type: "tarkeeb",
+            question: "Resolve the analytical construction parameters for this verbal string segment:",
+            words: [
+                { word: "خَلَقَ", correctRole: "Fi'l containing Mustatir Fa'il" },
+                { word: "الْإِنسَانَ", correctRole: "Maf'ool Bihi" }
+            ],
+            rolesPool: ["Fi'l containing Mustatir Fa'il", "Maf'ool Bihi", "Mubtada'", "Mudaf Ilayh"],
+            explanation: "'خَلَقَ' is a past tense active verb containing an embedded hidden pronoun (Mustatir) acting as its agent. 'الْإِنسَانَ' is in the state of Nasb because it functions as the direct object recipient (Maf'ool Bihi)."
+        },
+        {
+            verse: "إِيَّاكَ نَعْبُدُ",
+            translation: '"You alone we worship"',
+            type: "tarkeeb",
+            question: "Construct the advanced fronted construction tree mapping for this segment:",
+            words: [
+                { word: "إِيَّاكَ", correctRole: "Maf'ool Bihi Muqaddam" },
+                { word: "نَعْبُدُ", correctRole: "Fi'l with Ana Mustatir" }
+            ],
+            rolesPool: ["Maf'ool Bihi Muqaddam", "Fi'l with Ana Mustatir", "Mubtada'", "Khabar"],
+            explanation: "'إِيَّاكَ' is a detached accusative pronoun brought forward out of its standard position, creating a 'Maf'ool Bihi Muqaddam' framework. 'نَعْبُدُ' is the following verb holding an implied actor group within it."
+        },
+        {
+            verse: "تَبَّتْ يَدَا أَبِي لَهَبٍ",
+            translation: '"Ruined be the both hands of Abu Lahab"',
+            type: "nahw",
+            question: "Why does the word '...يَدَا' lack a visible or explicit Noon suffix marker considering its dual status?",
+            options: [
+                { text: "The dual Noon drops automatically when the noun assumes the role of a Mudaf.", correct: true },
+                { text: "It dropped due to phonetic weight under the influence of an implicit weak letter rule.", correct: false },
+                { text: "It is an un-declinable noun built upon an unchangeable dynamic vowel standard.", correct: false }
+            ],
+            explanation: "As taught in both Nahw Mir and Hidayatun Nahw, when a dual noun or sound masculine plural noun functions as a Mudaf, its structural suffix Noon (Noon al-I'rab) must be dropped."
+        },
+        {
+            verse: "فِي دِينِ اللَّهِ",
+            translation: '"Into the religion of Allah"',
+            type: "tarkeeb",
+            question: "Formulate the multi-layered grammatical architecture tree below:",
+            words: [
+                { word: "فِي", correctRole: "Harf Jarr" },
+                { word: "دِينِ", correctRole: "Majroor & Mudaf" },
+                { word: "اللَّهِ", correctRole: "Mudaf Ilayh" }
+            ],
+            rolesPool: ["Harf Jarr", "Majroor & Mudaf", "Mudaf Ilayh", "Fa'il", "Mubtada'"],
+            explanation: "'فِي' acts directly as the Harf Jarr. 'دِينِ' is Majroor due to it, and simultaneously serves as a Mudaf to the following majestic name 'اللَّهِ' which acts as its Mudaf Ilayh."
+        },
+        {
+            verse: "الْمَلِكُ الْقُدُّوسُ",
+            translation: '"The Sovereign, the Pure"',
+            type: "tarkeeb",
+            question: "Analyze the relationship between these consecutive definitive attributes:",
+            words: [
+                { word: "الْمَلِكُ", correctRole: "Mawsoof" },
+                { word: "الْقُدُّوسُ", correctRole: "Sifah" }
+            ],
+            rolesPool: ["Mawsoof", "Sifah", "Mubtada'", "Khabar"],
+            explanation: "This displays a standard attributive phrase (Murakkab Tauseefi). 'الْمَلِكُ' is the noun being described (Mawsoof) and 'الْقُدُّوسُ' is its descriptive attribute (Sifah), matching perfectly in gender, case, and definiteness."
+        },
+        {
+            verse: "هُنَالِكَ الْوَلَايَةُ لِلَّهِ",
+            translation: '"There, the authority is for Allah"',
+            type: "nahw",
+            question: "According to Hidayatun Nahw, what category of governing agent does 'لِ' belong to, and what case state does it produce?",
+            options: [
+                { text: "Huruf al-Jarr, producing the state of Jarr on the governing noun.", correct: true },
+                { text: "Huruf al-Nasb, rendering the following construct into an adverb.", correct: false },
+                { text: "Huruf al-Jazm, restricting verbal extensions.", correct: false }
+            ],
+            explanation: "The particle 'Lam' belongs to the 17 Huruf al-Jarr defined across classical texts. It renders the magnificent name into a genitive state (Majroor)."
+        },
+        {
+            verse: "وَأَنفِقُوا فِي سَبِيلِ اللَّهِ",
+            translation: '"And spend in the way of Allah"',
+            type: "nahw",
+            question: "What specific grammatical imperative category does the structural verb 'أَنفِقُوا' fall under based on Hidayatun Nahw specifications?",
+            options: [
+                { text: "Amr al-Hadir al-Ma'roof (Present Active Imperative), tracking standard masculine plural designations.", correct: true },
+                { text: "Amr al-Ghaib al-Majhool (Passive Absent Imperative) relying on heavy prefixed metrics.", correct: false },
+                { text: "Fi'l al-Nahi (Prohibitive Command Mode) displaying alternate root terminations.", correct: false }
+            ],
+            explanation: "'أَنفِقُوا' is built from the expanded Form IV verbal matrix (Irealization / If'aal). It maps directly to Amr al-Hadir al-Ma'roof for plural entities, losing its radical structural final Noon because it is in a specialized command imperative state."
+        },
+        {
+            verse: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ",
+            translation: '"The path of those upon whom You have bestowed favor"',
+            type: "tarkeeb",
+            question: "Deconstruct the exact relational values connecting the initial noun component to the following relational structure:",
+            words: [
+                { word: "صِرَاطَ", correctRole: "Mudaf" },
+                { word: "الَّذِينَ", correctRole: "Ism Mawsool (Mudaf Ilayh base)" }
+            ],
+            rolesPool: ["Mudaf", "Ism Mawsool (Mudaf Ilayh base)", "Silah", "Fa'il", "Khabar"],
+            explanation: "'صِرَاطَ' is positioned explicitly as the opening Mudaf component. The relative noun 'الَّذِينَ' completes its structural expansion requirements by functioning as the semantic Mudaf Ilayh base layer."
+        }
+    ];
+
+    let tallyScore = 0;
+    let streakMetric = 0;
+    let tierLevel = 1;
+    let contextEntity = null;
+    let currentTarkeebState = {};
+    let selectedRoleValue = null;
+    let selectedSlotIndex = null;
+
+    const rankGlossary = [
+        "Mubtadi' (Beginner Scribe)",
+        "Mutawassit (Syntax Apprentice)",
+        "Mahir (Advanced Grammarian)",
+        "Muhaqqiq (Classical Philologist)",
+        "Ustadh of Hidayatun Nahw"
+    ];
+
+    /*
+     ==========================================================================================
+     CORE RUNTIME ARCHITECTURE
+     ==========================================================================================
+    */
+    function transformRankState() {
+        tierLevel = Math.floor(tallyScore / 4) + 1;
+        let indexSelector = Math.min(Math.floor((tierLevel - 1) / 3), rankGlossary.length - 1);
+        document.getElementById('display-rank').innerHTML = `${rankGlossary[indexSelector]} <span>(Lvl ${tierLevel})</span>`;
+    }
+
+    function produceProceduralQuestion() {
+        let referenceSeed = linguisticsRepository[Math.floor(Math.random() * linguisticsRepository.length)];
+        
+        if (referenceSeed.type !== "tarkeeb") {
+            let optionsShuffled = referenceSeed.options.map(obj => ({...obj}));
+            for (let i = optionsShuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsShuffled[i], optionsShuffled[j]] = [optionsShuffled[j], optionsShuffled[i]];
+            }
+            return { ...referenceSeed, options: optionsShuffled };
+        }
+        return referenceSeed;
+    }
+
+    function launchQuestCycle() {
+        contextEntity = produceProceduralQuestion();
+        
+        document.getElementById('viewport-arabic').textContent = contextEntity.verse;
+        document.getElementById('viewport-translation').textContent = contextEntity.translation;
+        document.getElementById('display-question').textContent = contextEntity.question;
+        
+        const badgeElement = document.getElementById('display-type');
+        badgeElement.textContent = contextEntity.type;
+        badgeElement.className = `category-tag ${contextEntity.type}`;
+
+        const optionsBox = document.getElementById('viewport-options');
+        const tarkeebBoard = document.getElementById('viewport-tarkeeb');
+        const reviewPanel = document.getElementById('viewport-critique');
+        const actionBtn = document.getElementById('action-trigger');
+
+        optionsBox.innerHTML = '';
+        reviewPanel.style.display = 'none';
+        actionBtn.style.display = 'none';
+        currentTarkeebState = {};
+        selectedRoleValue = null;
+        selectedSlotIndex = null;
+
+        if (contextEntity.type !== "tarkeeb") {
+            optionsBox.style.display = 'flex';
+            tarkeebBoard.style.display = 'none';
+
+            contextEntity.options.forEach((choiceItem) => {
+                const blockNode = document.createElement('button');
+                blockNode.className = 'option-node';
+                blockNode.innerHTML = `<span>${choiceItem.text}</span>`;
+                blockNode.onclick = () => verifyMCQAnswer(blockNode, choiceItem.correct);
+                optionsBox.appendChild(blockNode);
+            });
+        } else {
+            optionsBox.style.display = 'none';
+            tarkeebBoard.style.display = 'flex';
+            actionBtn.style.display = 'block';
+            actionBtn.textContent = "Evaluate Tarkeeb Architecture";
+
+            setupInteractiveTarkeebGrid();
+        }
+
+        document.getElementById('display-score').textContent = tallyScore;
+        document.getElementById('display-streak-count').textContent = `${streakMetric}/6`;
+        document.getElementById('display-streak').style.width = `${(streakMetric / 6) * 100}%`;
+        transformRankState();
+    }
+
+    /*
+     ==========================================================================================
+     EVALUATION LAYER LOGIC
+     ==========================================================================================
+    */
+    function verifyMCQAnswer(elementNode, assessmentResult) {
+        const structuralNodes = document.querySelectorAll('.option-node');
+        structuralNodes.forEach(node => node.disabled = true);
+        const reviewPanel = document.getElementById('viewport-critique');
+
+        if (assessmentResult) {
+            elementNode.classList.add('node-correct');
+            reviewPanel.className = "critique-panel node-correct";
+            reviewPanel.innerHTML = `<strong>Correct Realization!</strong>${contextEntity.explanation}`;
+            tallyScore += 2;
+            streakMetric = Math.min(streakMetric + 1, 6);
+        } else {
+            elementNode.classList.add('node-wrong');
+            reviewPanel.className = "critique-panel node-wrong";
+            reviewPanel.innerHTML = `<strong>Structural Adjustment Required:</strong> Review classical syntax paradigms.<br><br>${contextEntity.explanation}`;
+            streakMetric = 0;
+            contextEntity.options.forEach((item, idx) => {
+                if (item.correct) structuralNodes[idx].classList.add('node-correct');
+            });
+        }
+
+        reviewPanel.style.display = 'block';
+        const actionBtn = document.getElementById('action-trigger');
+        actionBtn.style.display = 'block';
+        actionBtn.textContent = "Advance Quest Tier →";
+    }
+
+    /*
+     ==========================================================================================
+     ADVANCED TARKBEEB SELECTION INTERFACE
+     ==========================================================================================
+    */
+    function setupInteractiveTarkeebGrid() {
+        const slotsContainer = document.getElementById('tarkeeb-slots-container');
+        const poolContainer = document.getElementById('tarkeeb-labels-pool');
+        
+        slotsContainer.innerHTML = '';
+        poolContainer.innerHTML = '';
+
+        contextEntity.words.forEach((item, index) => {
+            const slotCard = document.createElement('div');
+            slotCard.className = 'tarkeeb-slot-card';
+            slotCard.id = `slot-card-${index}`;
+            slotCard.innerHTML = `
+                <span class="word-label">${item.word}</span>
+                <div class="interactive-display-zone" id="display-zone-${index}">Select Word Card</div>
+            `;
+            
+            slotCard.onclick = () => selectSlotForAssignment(index);
+            slotsContainer.appendChild(slotCard);
+        });
+
+        contextEntity.rolesPool.forEach((role, rIdx) => {
+            const roleNode = document.createElement('button');
+            roleNode.className = 'clickable-role-node';
+            roleNode.textContent = role;
+            roleNode.id = `role-node-${rIdx}`;
+            
+            roleNode.onclick = (e) => {
+                e.stopPropagation();
+                selectRoleForAssignment(role, rIdx);
+            };
+            poolContainer.appendChild(roleNode);
+        });
+    }
+
+    function selectSlotForAssignment(index) {
+        document.querySelectorAll('.tarkeeb-slot-card').forEach(c => c.classList.remove('selected-slot'));
+        
+        selectedSlotIndex = index;
+        document.getElementById(`slot-card-${index}`).classList.add('selected-slot');
+
+        if (selectedRoleValue !== null) {
+            assignSelectedRoleToSlot();
+        }
+    }
+
+    function selectRoleForAssignment(roleText, rIdx) {
+        document.querySelectorAll('.clickable-role-node').forEach(n => n.classList.remove('active-selection'));
+        
+        selectedRoleValue = roleText;
+        document.getElementById(`role-node-${rIdx}`).classList.add('active-selection');
+
+        if (selectedSlotIndex !== null) {
+            assignSelectedRoleToSlot();
+        }
+    }
+
+    function assignSelectedRoleToSlot() {
+        const targetZone = document.getElementById(`display-zone-${selectedSlotIndex}`);
+        targetZone.textContent = selectedRoleValue;
+        targetZone.classList.add('filled');
+        
+        currentTarkeebState[selectedSlotIndex] = selectedRoleValue;
+
+        document.querySelectorAll('.tarkeeb-slot-card').forEach(c => c.classList.remove('selected-slot'));
+        document.querySelectorAll('.clickable-role-node').forEach(n => n.classList.remove('active-selection'));
+        selectedSlotIndex = null;
+        selectedRoleValue = null;
+    }
+
+    function evaluateTarkeebSubmission() {
+        let isPerfect = true;
+        
+        contextEntity.words.forEach((item, index) => {
+            const zone = document.getElementById(`display-zone-${index}`);
+            if (currentTarkeebState[index] === item.correctRole) {
+                zone.style.background = "rgba(16, 185, 129, 0.1)";
+                zone.style.borderColor = "var(--emerald-true)";
+                zone.style.color = "#a7f3d0";
+            } else {
+                zone.style.background = "rgba(239, 68, 68, 0.1)";
+                zone.style.borderColor = "var(--rose-true)";
+                zone.style.color = "#fecdd3";
+                isPerfect = false;
+            }
+        });
+
+        const reviewPanel = document.getElementById('viewport-critique');
+        if (isPerfect) {
+            reviewPanel.className = "critique-panel node-correct";
+            reviewPanel.innerHTML = `<strong>Tarkeeb Architecture Confirmed!</strong> Masterful morphological matrix layout execution.<br><br>${contextEntity.explanation}`;
+            tallyScore += 3;
+            streakMetric = Math.min(streakMetric + 2, 6);
+        } else {
+            reviewPanel.className = "critique-panel node-wrong";
+            reviewPanel.innerHTML = `<strong>Structural Grid Contradiction:</strong> Re-verify clause elements against the operational rules of syntax.<br><br>${contextEntity.explanation}`;
+            streakMetric = 0;
+        }
+
+        reviewPanel.style.display = 'block';
+        const actionBtn = document.getElementById('action-trigger');
+        actionBtn.textContent = "Advance Quest Tier →";
+    }
+
+    function advanceQuestRoute() {
+        const actionBtn = document.getElementById('action-trigger');
+        if (contextEntity.type === "tarkeeb" && actionBtn.textContent.includes("Evaluate")) {
+            evaluateTarkeebSubmission();
+        } else {
+            launchQuestCycle();
+        }
+    }
+
+    // Initialize Infinite Engine Loop
+    launchQuestCycle();
+</script>
+</body>
+</html>
