@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Mastery Quest: Nahw & Sarf</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #1e1e24;
+            --primary: #cda250;
+            --primary-hover: #b88f3e;
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            box-sizing: border-box;
+            border: 1px solid #2a2a35;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+        }
+
+        .progress-bar {
+            background-color: #2d2d38;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            background-color: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .verse-box {
+            background-color: #15151a;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .arabic {
+            font-family: 'Traditional Arabic', 'Amiri', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            direction: rtl;
+            margin-bottom: 10px;
+            line-height: 2.5rem;
+        }
+
+        .translation {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .question-box {
+            margin-bottom: 20px;
+        }
+
+        .question-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .tag-sarf { background-color: #3b82f6; color: white; }
+        .tag-nahw { background-color: #8b5cf6; color: white; }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #25252e;
+            border: 1px solid #3f3f50;
+            color: var(--text);
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #2d2d38;
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: #10b981;
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-color: var(--error);
+            color: #ef4444;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            display: none;
+        }
+
+        .feedback.correct { background-color: rgba(16, 185, 129, 0.1); color: #34d399; }
+        .feedback.wrong { background-color: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+        .next-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: #121214;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .results-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div id="game-screen">
+        <div class="header">
+            <h1>🕌 Nahw & Sarf Quest</h1>
+            <div class="stats">
+                <span id="level-indicator">Level 1/3</span>
+                <span id="score-indicator">Score: 0</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="verse-box">
+            <div class="arabic" id="arabic-text">قُلْ هُوَ اللَّهُ أَحَدٌ</div>
+            <div class="translation" id="translation-text">"Say, 'He is Allah, [who is] One.'"</div>
+        </div>
+
+        <div class="question-box">
+            <span class="question-tag tag-sarf" id="q-type">Sarf</span>
+            <div class="question-text" id="q-text">What is the root and pattern of the verb قُلْ?</div>
+            <div class="options" id="options-container">
+                </div>
+            <div class="feedback" id="feedback-box"></div>
+        </div>
+
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <div class="results-screen" id="results-screen">
+        <h2>Quest Completed!</h2>
+        <p>You have tested your knowledge of Quranic Arabic grammar and morphology.</p>
+        <div class="score-display" id="final-score">0 / 6</div>
+        <p id="performance-msg"></p>
+        <button class="next-btn" style="display: block;" onclick="restartGame()">Play Again</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            verse: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+            translation: '"Say, \'He is Allah, [who is] One.\'"',
+            level: "Level 1: Surah Al-Ikhlas",
+            type: "sarf",
+            question: "What is the root letters and scale (Wazn) of the command verb قُلْ (Qul)?",
+            options: [
+                { text: "Root: ق-و-ل, Wazn: فُلْ (Middle weak letter dropped)", correct: true },
+                { text: "Root: ق-ل-ل, Wazn: فَعَلَ", correct: false },
+                { text: "Root: أ-ق-ل, Wazn: أَفْعَلَ", correct: false }
+            ],
+            explanation: "The root is ق-و-ل. When turned into a command, the middle weak letter (Waw) is dropped due to the meeting of two unvoweled letters (Iltiqa' as-Sakinayn), dropping the middle letter from the scale, changing 'Fu'l' to 'Ful'."
+        },
+        {
+            verse: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+            translation: '"Say, \'He is Allah, [who is] One.\'"',
+            level: "Level 1: Surah Al-Ikhlas",
+            type: "nahw",
+            question: "What is the grammatical state (I'rab) and role of the word اللَّهُ?",
+            options: [
+                { text: "Mansoub, because it is the object (Mafo'ol bihi) of 'Qul'", correct: false },
+                { text: "Marfoo', because it is acting as the Subject (Mubtada')", correct: true },
+                { text: "Majroor, because of an implicit particle", correct: false }
+            ],
+            explanation: "اللَّهُ is Marfoo' with a visible Dammah because it acts as the Subject (Mubtada') of the nominal sentence that states who He is."
+        },
+        {
+            verse: "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
+            translation: '"Indeed, mankind is in loss."',
+            level: "Level 2: Surah Al-Asr",
+            type: "sarf",
+            question: "Morphologically, what type of noun is إِنسَان (Insan)?",
+            options: [
+                { text: "Ism Faa'il (Active Participle)", correct: false },
+                { text: "Ism Jamid (A primitive/frozen noun, not derived from an active verb scale)", correct: true },
+                { text: "Ism Maf'ool (Passive Participle)", correct: false }
+            ],
+            explanation: "إِنسَان is considered an Ism Jamid (frozen noun) because it doesn't map directly onto standard derivative fluid structures, though etymologists trace it to roots like companionship or forgetfulness."
+        },
+        {
+            verse: "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
+            translation: '"Indeed, mankind is in loss."',
+            level: "Level 2: Surah Al-Asr",
+            type: "nahw",
+            question: "Why does الْإِنسَانَ end with a Fathah (Mansoub), and what is the 'لَ' in لَفِي?",
+            options: [
+                { text: "It is Mansoub because of 'إِنَّ', and the 'لَ' is for absolute emphasis (Al-Lam al-Muzahlaqah)", correct: true },
+                { text: "It is Mansoub due to a hidden verb, and the 'لَ' is a preposition meaning 'for'", correct: false },
+                { text: "It is Mansoub because it's an adverb, and the 'لَ' is part of the root word", correct: false }
+            ],
+            explanation: "إِنَّ causes its subject (Ism Inna) to become Mansoub. The 'لَ' is Al-Lam al-Muzahlaqah (displaced Lam), pushed to the predicate to emphasize the absolute certainty of the statement."
+        },
+        {
+            verse: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ",
+            translation: '"Actions are but by intentions..." [Hadith]',
+            level: "Level 3: Prophetic Hadith",
+            type: "sarf",
+            question: "What is the structural type and singular form of the word الْأَعْمَالُ?",
+            options: [
+                { text: "Sound Masculine Plural, Singular: عَمِيل", correct: false },
+                { text: "Broken Plural (Jam' Taksir), Singular: عَمَل", correct: true },
+                { text: "Collective Noun, Singular: عُمْلَة", correct: false }
+            ],
+            explanation: "الْأَعْمَالُ is a Broken Plural (Jam' Taksir) built on the pattern of أَفْعَال, broken from its singular form عَمَل."
+        },
+        {
+            verse: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ",
+            translation: '"Actions are but by intentions..." [Hadith]',
+            level: "Level 3: Prophetic Hadith",
+            type: "nahw",
+            question: "Why does الْأَعْمَالُ end with a Dammah (Marfoo') despite following 'إنّ'?",
+            options: [
+                { text: "Because the phrase is an exception to grammatical rules", correct: false },
+                { text: "Because 'مَا' attaches to 'إِنَّ' and neutralizes its grammatical power, leaving the noun as a normal Mubtada'", correct: true },
+                { text: "Because 'بِالنِّيَّاتِ' overrides the rule of 'إِنَّ'", correct: false }
+            ],
+            explanation: "The 'مَا' attached to 'إِنَّ' is called 'Ma al-Kaffah' (the preventer). It nullifies the ability of Inna to make nouns Mansoub, restoring the phrase to a basic Mubtada' and Khabar structure while adding a rhetorical restriction ('Only')."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const gameScreen = document.getElementById('game-screen');
+    const resultsScreen = document.getElementById('results-screen');
+    const levelIndicator = document.getElementById('level-indicator');
+    const scoreIndicator = document.getElementById('score-indicator');
+    const progressFill = document.getElementById('progress-fill');
+    const arabicText = document.getElementById('arabic-text');
+    const translationText = document.getElementById('translation-text');
+    const qType = document.getElementById('q-type');
+    const qText = document.getElementById('q-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackBox = document.getElementById('feedback-box');
+    const nextBtn = document.getElementById('next-btn');
+    const finalScore = document.getElementById('final-score');
+    const performanceMsg = document.getElementById('performance-msg');
+
+    function loadQuestion() {
+        const currentData = quizData[currentQuestionIndex];
+        
+        // Update stats and progress
+        levelIndicator.textContent = currentData.level;
+        scoreIndicator.textContent = `Score: ${score}`;
+        progressFill.style.width = `${(currentQuestionIndex / quizData.length) * 100}%`;
+
+        // Update content
+        arabicText.textContent = currentData.verse;
+        translationText.textContent = currentData.translation;
+        qText.textContent = currentData.question;
+        
+        // Handle Question Tag Style
+        qType.textContent = currentData.type;
+        qType.className = `question-tag tag-${currentData.type}`;
+
+        // Clear layout
+        optionsContainer.innerHTML = '';
+        feedbackBox.style.display = 'none';
+        nextBtn.style.display = 'none';
+
+        // Render options
+        currentData.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option.text;
+            button.onclick = () => selectOption(button, option.correct, currentData.explanation);
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function selectOption(selectedButton, isCorrect, explanation) {
+        // Disable all buttons after selection
+        const buttons = optionsContainer.querySelectorAll('.option-btn');
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (isCorrect) {
+            selectedButton.classList.add('correct');
+            feedbackBox.className = 'feedback correct';
+            feedbackBox.innerHTML = `<strong>Correct!</strong> <br>${explanation}`;
+            score++;
+            scoreIndicator.textContent = `Score: ${score}`;
+        } else {
+            selectedButton.classList.add('wrong');
+            feedbackBox.className = 'feedback wrong';
+            feedbackBox.innerHTML = `<strong>Incorrect.</strong> <br>${explanation}`;
+            
+            // Highlight the correct answer anyway
+            quizData[currentQuestionIndex].options.forEach((opt, idx) => {
+                if(opt.correct) {
+                    buttons[idx].classList.add('correct');
+                }
+            });
+        }
+
+        feedbackBox.style.display = 'block';
+        nextBtn.style.display = 'block';
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        gameScreen.style.display = 'none';
+        resultsScreen.style.display = 'block';
+        finalScore.textContent = `${score} / ${quizData.length}`;
+        
+        if(score === quizData.length) {
+            performanceMsg.textContent = "Allahu Akbar! Perfect score. Your Nahw and Sarf are exceptionally strong.";
+        } else if (score >= 4) {
+            performanceMsg.textContent = "MashaAllah! Great job. You have a solid grasp on Arabic grammar structures.";
+        } else {
+            performanceMsg.textContent = "Good try! Arabic grammar takes time. Re-read the explanations and try again!";
+        }
+    }
+
+    function restartGame() {
+        currentQuestionIndex = 0;
+        score = 0;
+        resultsScreen.style.display = 'none';
+        gameScreen.style.display = 'block';
+        loadQuestion();
+    }
+
+    // Initialize game
+    loadQuestion();
+</script>
+</body>
+</html>
