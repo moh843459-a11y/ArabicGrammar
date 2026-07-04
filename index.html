@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Arabic Mastery Quest: Nahw & Sarf</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0b0c10;
+            --bg-gradient: radial-gradient(circle at top right, #1a1c24 0%, #0b0c10 100%);
+            --panel-bg: rgba(22, 25, 35, 0.65);
+            --panel-border: rgba(255, 255, 255, 0.07);
+            --gold-primary: #e5b869;
+            --gold-glow: rgba(229, 184, 105, 0.2);
+            --text-pure: #ffffff;
+            --text-body: #cbd5e1;
+            --text-dark: #64748b;
+            --sarf-accent: #06b6d4;
+            --sarf-glass: rgba(6, 182, 212, 0.08);
+            --nahw-accent: #8b5cf6;
+            --nahw-glass: rgba(139, 92, 246, 0.08);
+            --emerald-true: #10b981;
+            --emerald-glass: rgba(16, 185, 129, 0.12);
+            --rose-true: #f43f5e;
+            --rose-glass: rgba(244, 63, 94, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-base);
+            background: var(--bg-gradient);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Elements */
+        .ambient-light-1 {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: var(--gold-glow);
+            filter: blur(120px);
+            border-radius: 50%;
+            top: -10%;
+            right: -5%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .ambient-light-2 {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: rgba(139, 92, 246, 0.1);
+            filter: blur(100px);
+            border-radius: 50%;
+            bottom: -5%;
+            left: -5%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 720px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--panel-border);
+            border-radius: 28px;
+            padding: 44px;
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .header-widget {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .rank-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rank-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+        }
+
+        .rank-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            text-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .metric-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 10px 18px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-pure);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric-badge span {
+            color: var(--gold-primary);
+        }
+
+        .tracker-timeline {
+            background: rgba(255, 255, 255, 0.04);
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 36px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tracker-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-primary), #ffd993);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 0 10px var(--gold-primary);
+        }
+
+        .verse-viewport {
+            background: rgba(10, 11, 14, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 22px;
+            padding: 36px;
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verse-viewport::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gold-primary);
+        }
+
+        .arabic-display {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.9;
+            direction: rtl;
+            margin-bottom: 16px;
+            color: var(--text-pure);
+        }
+
+        .translation-display {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-style: italic;
+            line-height: 1.6;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .interactive-zone {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-tag {
+            align-self: flex-start;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 18px;
+        }
+
+        .category-tag.sarf { color: var(--sarf-accent); background: var(--sarf-glass); border: 1px solid rgba(6, 182, 212, 0.2); }
+        .category-tag.nahw { color: var(--nahw-accent); background: var(--nahw-glass); border: 1px solid rgba(139, 92, 246, 0.2); }
+
+        .question-statement {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-pure);
+            margin-bottom: 24px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option-node {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-body);
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-node:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--gold-primary);
+            color: var(--text-pure);
+            transform: translateX(4px);
+        }
+
+        .option-node:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-node.node-correct {
+            background: var(--emerald-glass);
+            border-color: var(--emerald-true);
+            color: #a7f3d0;
+            font-weight: 600;
+        }
+
+        .option-node.node-wrong {
+            background: var(--rose-glass);
+            border-color: var(--rose-true);
+            color: #fecdd3;
+        }
+
+        .critique-panel {
+            margin-top: 24px;
+            padding: 22px;
+            border-radius: 16px;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            display: none;
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .critique-panel.node-correct { background: var(--emerald-glass); color: #a7f3d0; border-left: 4px solid var(--emerald-true); }
+        .critique-panel.node-wrong { background: var(--rose-glass); color: #fecdd3; border-left: 4px solid var(--rose-true); }
+
+        .submission-trigger {
+            width: 100%;
+            background: var(--gold-primary);
+            color: #0b0c10;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 28px;
+            display: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 24px rgba(229, 184, 105, 0.2);
+        }
+
+        .submission-trigger:hover {
+            background: #f0c984;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(229, 184, 105, 0.3);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width: 600px) {
+            .dashboard-card { padding: 24px; }
+            .arabic-display { font-size: 2rem; }
+            .header-widget { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .metric-badge { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-light-1"></div>
+<div class="ambient-light-2"></div>
+
+<div class="game-wrapper">
+    <div class="dashboard-card">
+        <div class="header-widget">
+            <div class="rank-container">
+                <span class="rank-label">Knowledge Standing</span>
+                <span class="rank-title" id="display-rank">Student (Level 1)</span>
+            </div>
+            <div class="metric-badge">
+                Quest Score: <span id="display-score">0</span>
+            </div>
+        </div>
+
+        <div class="tracker-timeline">
+            <div class="tracker-fill" id="display-streak"></div>
+        </div>
+
+        <div class="verse-viewport">
+            <div class="arabic-display" id="viewport-arabic">...</div>
+            <div class="translation-display" id="viewport-translation">...</div>
+        </div>
+
+        <div class="interactive-zone">
+            <span class="category-tag" id="display-type">Sarf</span>
+            <div class="question-statement" id="display-question">...</div>
+            
+            <div class="options-grid" id="viewport-options">
+                </div>
+
+            <div class="critique-panel" id="viewport-critique"></div>
+        </div>
+
+        <button class="submission-trigger" id="action-trigger" onclick="advanceQuestRoute()">Advance Quest Tier →</button>
+    </div>
+</div>
+
+<script>
+    // Robust, modular structural database pool for procedural selection mechanics
+    const linguisticsRepository = [
+        {
+            verse: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+            translation: '"Say, \'He is Allah, [who is] One.\'"',
+            type: "sarf",
+            question: "Analyze the morpho-phonemic change structurally present in the imperative verb قُلْ.",
+            options: [
+                { text: "The unvoweled middle weak radical (Waw) was omitted to eliminate the phonotactic meeting of two silent letters (Iltiqa' as-Sakinayn).", correct: true },
+                { text: "It is an unaugmented quadriliteral root configuration maintaining balanced metrics.", correct: false },
+                { text: "The initial radical underwent assimilation following an independent rule of vocalization expansion.", correct: false }
+            ],
+            explanation: "The base form stems from the root ق-و-ل. Converting to a standard command introduces a silent sukoon to the ending. To resolve two adjacent unvoweled symbols, the internal long vowel dropped out."
+        },
+        {
+            verse: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+            translation: '"Say, \'He is Allah, [who is] One.\'"',
+            type: "nahw",
+            question: "What is the precise structural syntax profile assigned to the term اللَّهُ here?",
+            options: [
+                { text: "It forms the primary subject (Mubtada') of an analytical nominal clause, thereby retaining its native nominative state.", correct: true },
+                { text: "It acts as a post-positional complement modifier explaining an early relative marker.", correct: false },
+                { text: "It functions directly as the object receiver (Maf'ool Bihi) assigned by the early imperative command.", correct: false }
+            ],
+            explanation: "The majestic name is structurally independent as a Subject (Mubtada') within the inner sentence component, showing a clear visible nominative Dammah suffix."
+        },
+        {
+            verse: "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
+            translation: '"Indeed, mankind is in loss."',
+            type: "nahw",
+            question: "What syntactic function is performed by the particle marker 'لَ' within 'لَفِي'?",
+            options: [
+                { text: "Al-Lam al-Muzahlaqah (the displaced emphasis tracker), pushed downstream to reinforce emphasis without stacking particles.", correct: true },
+                { text: "A secondary relative element establishing descriptive properties over the noun structure.", correct: false },
+                { text: "A primary prepositional operator requiring systemic changes to case endings.", correct: false }
+            ],
+            explanation: "Since 'إِنَّ' already emphasizes the start of the clause, this accompanying introductory emphasizing Lam is pushed further down into the predicate (Khabar) layer to maintain clear phrasing balance."
+        },
+        {
+            verse: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+            translation: '"When the victory of Allah has come and the conquest..."',
+            type: "nahw",
+            question: "Identify the syntax case structural assignment operating over the keyword نَصْرُ.",
+            options: [
+                { text: "It represents the active descriptive agent (Fa'il) of the past active action matrix جَاءَ.", correct: true },
+                { text: "It functions as a complex directional adverb specifying context rules.", correct: false },
+                { text: "It is an auxiliary absolute adverb confirming literal frequency configurations.", correct: false }
+            ],
+            explanation: "Because the syntactic act of arriving is executed directly by the entity 'Victory' (نَصْرُ), it assumes the structural position of the Fa'il, taking the standard nominative case marker."
+        },
+        {
+            verse: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+            translation: '"[All] praise is [due] to Allah, Lord of the worlds"',
+            type: "sarf",
+            question: "Classify the accurate morphological template profile of the noun configuration الْحَمْدُ.",
+            options: [
+                { text: "It is a foundational abstract root verbal noun (Masdar) tracing directly back to the triliteral template فَعْل.", correct: true },
+                { text: "It is a specialized active agent noun pattern conveying dynamic operational values.", correct: false },
+                { text: "It represents an enhanced comparative descriptor template expressing superiority metrics.", correct: false }
+            ],
+            explanation: "الْحَمْدُ acts as the systematic primary abstract verbal noun (Masdar) derived from the raw underlying base active verb system حَمِدَ."
+        },
+        {
+            verse: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+            translation: '"It is You we worship and You we ask for help."',
+            type: "nahw",
+            question: "What rhetorical syntax mechanism explains advancing the pronoun object إِيَّاكَ ahead of its respective action verbs?",
+            options: [
+                { text: "To produce exclusive restriction (Hasr), ensuring that the designated action applies uniquely to the target object.", correct: true },
+                { text: "To meet simple rhyme patterns within standard phrase layout traditions.", correct: false },
+                { text: "It is a random optional transposition shift devoid of core stylistic impacts.", correct: false }
+            ],
+            explanation: "In classical syntax frameworks, placing the object component (Maf'ool Bihi) abnormally ahead of its driving verb transforms the semantic scope to point exclusively to that subject."
+        }
+    ];
+
+    let tallyScore = 0;
+    let streakMetric = 0;
+    let tierLevel = 1;
+    let contextEntity = null;
+
+    const rankGlossary = ["Trainee", "Grammar Scribe", "Syntax Analyst", "Classical Philologist", "Master Lexicographer"];
+
+    function transformRankState() {
+        tierLevel = Math.floor(tallyScore / 5) + 1;
+        let indexSelector = Math.min(Math.floor((tierLevel - 1) / 2), rankGlossary.length - 1);
+        document.getElementById('display-rank').textContent = `${rankGlossary[indexSelector]} (Level ${tierLevel})`;
+    }
+
+    // Procedural Infinite Loop Assembly Engine
+    function produceProceduralQuestion() {
+        let referenceSeed = linguisticsRepository[Math.floor(Math.random() * linguisticsRepository.length)];
+        
+        // Deep clone array contents to break structural references during algorithmic randomization
+        let optionsShuffled = referenceSeed.options.map(obj => ({...obj}));
+        
+        // Inline Fisher-Yates array shuffling cycle
+        for (let targetIndex = optionsShuffled.length - 1; targetIndex > 0; targetIndex--) {
+            const pivotIndex = Math.floor(Math.random() * (targetIndex + 1));
+            [optionsShuffled[targetIndex], optionsShuffled[pivotIndex]] = [optionsShuffled[pivotIndex], optionsShuffled[targetIndex]];
+        }
+
+        return {
+            verse: referenceSeed.verse,
+            translation: referenceSeed.translation,
+            type: referenceSeed.type,
+            question: referenceSeed.question,
+            options: optionsShuffled,
+            explanation: referenceSeed.explanation
+        };
+    }
+
+    function launchQuestCycle() {
+        contextEntity = produceProceduralQuestion();
+        
+        document.getElementById('viewport-arabic').textContent = contextEntity.verse;
+        document.getElementById('viewport-translation').textContent = contextEntity.translation;
+        document.getElementById('display-question').textContent = contextEntity.question;
+        
+        const badgeElement = document.getElementById('display-type');
+        badgeElement.textContent = contextEntity.type;
+        badgeElement.className = `category-tag ${contextEntity.type}`;
+
+        const optionsBox = document.getElementById('viewport-options');
+        optionsBox.innerHTML = '';
+        
+        document.getElementById('viewport-critique').style.display = 'none';
+        document.getElementById('action-trigger').style.display = 'none';
+
+        contextEntity.options.forEach((choiceItem) => {
+            const blockNode = document.createElement('button');
+            blockNode.className = 'option-node';
+            blockNode.innerHTML = `<span>${choiceItem.text}</span>`;
+            blockNode.onclick = () => verifyUserAction(blockNode, choiceItem.correct);
+            optionsBox.appendChild(blockNode);
+        });
+
+        // Sync Dashboard components
+        document.getElementById('display-score').textContent = tallyScore;
+        document.getElementById('display-streak').style.width = `${(streakMetric / 5) * 100}%`;
+        transformRankState();
+    }
+
+    function verifyUserAction(elementNode, assessmentResult) {
+        const structuralNodes = document.querySelectorAll('.option-node');
+        structuralNodes.forEach(node => node.disabled = true);
+
+        const reviewPanel = document.getElementById('viewport-critique');
+
+        if (assessmentResult) {
+            elementNode.classList.add('node-correct');
+            reviewPanel.className = "critique-panel node-correct";
+            reviewPanel.innerHTML = `<strong>Analysis Confirmed:</strong><br>${contextEntity.explanation}`;
+            tallyScore++;
+            streakMetric = Math.min(streakMetric + 1, 5);
+        } else {
+            elementNode.classList.add('node-wrong');
+            reviewPanel.className = "critique-panel node-wrong";
+            reviewPanel.innerHTML = `<strong>Structural Adjustment Needed:</strong><br>${contextEntity.explanation}`;
+            streakMetric = 0; // Reset streak modifier
+            
+            // Highlight explicit factual path
+            contextEntity.options.forEach((item, pointerIdx) => {
+                if (item.correct) {
+                    structuralNodes[pointerIdx].classList.add('node-correct');
+                }
+            });
+        }
+
+        reviewPanel.style.display = 'block';
+        document.getElementById('action-trigger').style.display = 'block';
+        document.getElementById('display-streak').style.width = `${(streakMetric / 5) * 100}%`;
+        document.getElementById('display-score').textContent = tallyScore;
+        transformRankState();
+    }
+
+    function advanceQuestRoute() {
+        launchQuestCycle();
+    }
+
+    // Core Initialization
+    launchQuestCycle();
+</script>
+</body>
+</html>
